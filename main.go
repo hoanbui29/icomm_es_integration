@@ -47,7 +47,7 @@ func main() {
 		Query: &types.Query{
 			MatchAll: &types.MatchAllQuery{},
 		},
-	}).Scroll("30m").Do(context.TODO())
+	}).Size(1000).Scroll("30m").Do(context.TODO())
 
 	if err != nil {
 		panic(err)
