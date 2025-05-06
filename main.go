@@ -8,7 +8,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
+	pq "github.com/lib/pq"
 	"github.com/rabbitmq/amqp091-go"
 	"icomm/esintegration/models"
 	"log"
@@ -207,7 +207,7 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 		"org",
 		data.Metadata.Autograph,
 		privacy,
-		keywords,
+		pq.Array(keywords),
 		physicalState,
 		hasAttachment,
 		reliabilityLevel,
