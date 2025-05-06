@@ -220,7 +220,7 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 		true,
 		1,
 		pq.Array([]string{}),
-		[]byte(""),
+		[]byte(`{}`),
 	}
 
 	var id string
