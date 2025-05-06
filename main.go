@@ -5,16 +5,15 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"icomm/esintegration/models"
-	"net/http"
-	"os"
-	"strings"
-
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/scroll"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/search"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
 	"github.com/joho/godotenv"
+	"icomm/esintegration/models"
+	"net/http"
+	"os"
+	"strings"
 )
 
 type esData struct {
@@ -56,6 +55,7 @@ func main() {
 
 	hitsMetadata := searchResult.Hits
 	scrollId := searchResult.ScrollId_
+	count := 0
 
 	for {
 		if hitsMetadata.Total.Value == 0 {
@@ -63,6 +63,8 @@ func main() {
 		}
 
 		processData(hitsMetadata.Hits)
+		count += len(hitsMetadata.Hits)
+		fmt.Printf("Processed %d documents\n", count)
 
 		scrollResponse, err := esClient.Scroll().Request(&scroll.Request{
 			ScrollId: *scrollId,
@@ -82,6 +84,5 @@ func processData(data []types.Hit) {
 		if err := json.Unmarshal(hit.Source_, &esDocument); err != nil {
 			panic(err)
 		}
-		fmt.Printf("Got document: %+v\n", esDocument)
 	}
 }
