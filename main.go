@@ -58,7 +58,7 @@ func main() {
 	count := 0
 
 	for {
-		if hitsMetadata.Total.Value == 0 {
+		if len(hitsMetadata.Hits) == 0 {
 			break
 		}
 
@@ -74,7 +74,7 @@ func main() {
 			panic(err)
 		}
 		hitsMetadata = scrollResponse.Hits
-		scrollId = searchResult.ScrollId_
+		scrollId = scrollResponse.ScrollId_
 	}
 }
 
