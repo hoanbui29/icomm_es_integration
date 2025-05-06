@@ -41,14 +41,20 @@ func main() {
 	esClient := initESClient()
 	mqChan := initRabbitMQ()
 
+	count := 0
+
 	for scanner.Scan() {
 		line := scanner.Text()
-		var item models.ES_Document
+		var item models.ES_RawData
 		err := json.Unmarshal([]byte(line), &item)
 		if err != nil {
 			log.Fatal(err)
 		}
-		processData(db, esClient, mqChan, &item)
+		processData(db, esClient, mqChan, &item.Source)
+		count++
+		if count%100 == 0 {
+			log.Printf("Processed %d documents", count)
+		}
 	}
 }
 

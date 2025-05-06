@@ -1,5 +1,9 @@
 package models
 
+type ES_RawData struct {
+	Source ES_Document `json:"_source"`
+}
+
 type ES_Document struct {
 	Content           any         `json:"content"`
 	FondCode          string      `json:"fondCode"`
