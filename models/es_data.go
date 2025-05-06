@@ -1,7 +1,7 @@
 package models
 
 type ES_Document struct {
-	Content           string      `json:"content"`
+	Content           any         `json:"content"`
 	FondCode          string      `json:"fondCode"`
 	FondCodePartyCode string      `json:"fondCode_partyCode"`
 	ID                string      `json:"id"`
