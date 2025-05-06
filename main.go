@@ -180,8 +180,9 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
         has_attachment,
         reliability_level,
         integration_id,
-        is_detect_face
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)
+        is_detect_face,
+        priority
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24)
     ON CONFLICT (integration_id) DO NOTHING
     RETURNING id;
     `
@@ -215,6 +216,7 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 		reliabilityLevel,
 		data.ID,
 		true,
+		1,
 	}
 
 	var id string
@@ -264,6 +266,7 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 		ReliabilityLevel:             reliabilityLevel,
 		IntegrationID:                &data.ID,
 		IsDetectFace:                 true,
+		Priority:                     1,
 	}
 
 	_, err = esClient.Index("icocr.staging.document").Document(document).Id(document.ID).Do(context.TODO())
