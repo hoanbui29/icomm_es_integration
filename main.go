@@ -184,8 +184,16 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
         priority,
         input_file_urls,
         configs,
-        can_find_document_by_image
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27)
+        can_find_document_by_image,
+        status,
+        approve_status,
+        ocr_process_status,
+        face_detect_process_status,
+        extract_pure_info_process_status,
+        extract_content_process_status,
+        legal_document_process_status
+
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34)
     ON CONFLICT (integration_id) DO NOTHING
     RETURNING id;
     `
@@ -223,6 +231,13 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 		pq.Array([]string{}),
 		[]byte(`{}`),
 		false,
+		1,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
 	}
 
 	var id string
