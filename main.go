@@ -152,6 +152,9 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 	default:
 		hasAttachment = models.No
 	}
+	metadata := data
+	metadataBytes, err := json.Marshal(metadata)
+	metadataStr := string(metadataBytes)
 
 	query := `
     INSERT INTO documents (
@@ -181,9 +184,6 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
     ON CONFLICT (integration_id) DO NOTHING
     RETURNING id;
     `
-	metadata := data
-	metadataBytes, err := json.Marshal(metadata)
-	metadataStr := string(metadataBytes)
 
 	if err != nil {
 		log.Fatalf("Error marshalling metadata: %v", err)
@@ -201,7 +201,7 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 		data.Metadata.ArcDocCode,
 		systemKeyId,
 		creatorName,
-		metadata,
+		metadataBytes,
 		inputSourceType,
 		language,
 		"org",
