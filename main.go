@@ -182,8 +182,9 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
         integration_id,
         is_detect_face,
         priority,
-        input_file_urls
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)
+        input_file_urls,
+        configs
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)
     ON CONFLICT (integration_id) DO NOTHING
     RETURNING id;
     `
@@ -219,6 +220,7 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 		true,
 		1,
 		pq.Array([]string{}),
+		"",
 	}
 
 	var id string
