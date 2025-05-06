@@ -158,6 +158,7 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 
 	query := `
     INSERT INTO documents (
+        id,
         title,
         subject,
         description,
@@ -180,7 +181,7 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
         reliability_level,
         integration_id,
         is_detect_face
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)
     ON CONFLICT (integration_id) DO NOTHING
     RETURNING id;
     `
@@ -191,6 +192,7 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 	creatorName := "system"
 
 	agrs := []any{
+		uuid.NewString(),
 		title,
 		data.Metadata.Subject,
 		data.Metadata.Description,
