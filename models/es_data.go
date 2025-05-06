@@ -31,7 +31,7 @@ type ES_Metadata struct {
 	IssuedDate         int64            `json:"issuedDate"`
 	IssuedDateRaw      string           `json:"issuedDate_raw"`
 	Keyword            string           `json:"keyword"`
-	Language           string           `json:"language"`
+	Language           []string         `json:"language"`
 	Maintenance        string           `json:"maintenance"`
 	Mode               string           `json:"mode"`
 	MovieTitle         string           `json:"movieTitle"`
