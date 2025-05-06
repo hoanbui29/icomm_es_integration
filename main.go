@@ -2,16 +2,19 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"icomm/esintegration/models"
+	"net/http"
+	"os"
+	"strings"
+
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/scroll"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/search"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
 	"github.com/joho/godotenv"
-	"icomm/esintegration/models"
-	"os"
-	"strings"
 )
 
 type esData struct {
@@ -32,6 +35,9 @@ func main() {
 		Addresses: esAddresses,
 		Username:  os.Getenv("ES_USERNAME"),
 		Password:  os.Getenv("ES_PASSWORD"),
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
 	}
 	esClient, err := elasticsearch.NewTypedClient(cfg)
 	if err != nil {
