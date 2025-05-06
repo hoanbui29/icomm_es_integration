@@ -4,168 +4,123 @@ import (
 	"time"
 )
 
-// DocumentDto represents the equivalent Go struct for DocumentDto class.
-type DocumentDto struct {
-	ID                           string                   `json:"id"`
-	CreatedTime                  time.Time                `json:"created_time"`
-	DetailsLastUpdatedTime       *time.Time               `json:"details_last_updated_time,omitempty"`
-	DetailsLastUpdatedBy         *string                  `json:"details_last_updated_by,omitempty"`
-	DetailsLastUpdatedByName     *string                  `json:"details_last_updated_by_name,omitempty"`
-	DetailsUpdated               bool                     `json:"details_updated"`
-	Title                        string                   `json:"title"`
-	DocumentCode                 *string                  `json:"document_code,omitempty"`
-	Description                  *string                  `json:"description,omitempty"`
-	IssuingAuthority             *string                  `json:"issuing_authority,omitempty"`
-	DocumentTemplateID           *string                  `json:"document_template_id,omitempty"`
-	Priority                     int                      `json:"priority"`
-	InputFileURLs                []string                 `json:"input_file_urls"`
-	Configs                      []DocumentTemplateDetail `json:"configs"`
-	Snippet                      *string                  `json:"snippet,omitempty"`
-	OriginalLangCode             string                   `json:"original_lang_code"`
-	TranslateLangCode            string                   `json:"translate_lang_code"`
-	Metadata                     any                      `json:"metadata,omitempty"`
-	EffectiveStartTime           *time.Time               `json:"effective_start_time,omitempty"`
-	EffectiveEndTime             *time.Time               `json:"effective_end_time,omitempty"`
-	Keywords                     []string                 `json:"keywords,omitempty"`
-	KeywordTypes                 *KeywordTypes            `json:"keyword_types,omitempty"`
-	Signer                       *string                  `json:"signer,omitempty"`
-	IsDetectFace                 bool                     `json:"is_detect_face"`
-	CanFindDocumentByImage       bool                     `json:"can_find_document_by_image"`
-	UploadConfigID               *string                  `json:"upload_config_id,omitempty"`
-	Publisher                    *string                  `json:"publisher,omitempty"`
-	FileType                     FileTypes                `json:"file_type"`
-	Status                       DocumentStatus           `json:"status"`
-	OCRProcessStatus             ProcessStatuses          `json:"ocr_process_status"`
-	FaceDetectProcessStatus      ProcessStatuses          `json:"face_detect_process_status"`
-	ExtractPureInfoProcessStatus ProcessStatuses          `json:"extract_pure_info_process_status"`
-	ExtractContentProcessStatus  ProcessStatuses          `json:"extract_content_process_status"`
-	LegalDocumentProcessStatus   ProcessStatuses          `json:"legal_document_process_status"`
-	ApproveStatus                ApproveStatus            `json:"approve_status"`
-	CreatorID                    string                   `json:"creator_id"`
-	CreatorName                  *string                  `json:"creator_name,omitempty"`
-	InsertedTime                 time.Time                `json:"inserted_time"`
-	SummaryAll                   *string                  `json:"summary_all,omitempty"`
-	Author                       *string                  `json:"author,omitempty"`
-	Autograph                    *string                  `json:"autograph,omitempty"`
-	ReliabilityLevel             *ReliabilityLevel        `json:"reliability_level,omitempty"`
-	PhysicalState                *PhysicalState           `json:"physical_state,omitempty"`
-	Classification               *Classification          `json:"classification,omitempty"`
-	ColorType                    *ColorType               `json:"color_type,omitempty"`
-	HasAttachment                *HasAttachment           `json:"has_attachment,omitempty"`
-	ResumeID                     *string                  `json:"resume_id,omitempty"`
-	Privacy                      Privacy                  `json:"privacy"`
-	HasBackup                    bool                     `json:"has_backup"`
-	BackupStatus                 BackupStatus             `json:"backup_status"`
-	Genre                        *DocumentGenre           `json:"genre,omitempty"`
-	Form                         *DocumentForm            `json:"form,omitempty"`
-	Note                         *string                  `json:"note,omitempty"`
-	InputSourceType              *string                  `json:"input_source_type,omitempty"`
-	IntegrationID                *string                  `json:"integration_id,omitempty"`
+type Document struct {
+	ID                           string            `json:"id"` // UUID
+	CreatedTime                  time.Time         `json:"created_time"`
+	DetailsLastUpdatedTime       *time.Time        `json:"details_last_updated_time,omitempty"`
+	DetailsLastUpdatedBy         *string           `json:"details_last_updated_by,omitempty"`
+	DetailsLastUpdatedByName     *string           `json:"details_last_updated_by_name,omitempty"`
+	DetailsUpdated               bool              `json:"details_updated"`
+	Title                        string            `json:"title"`
+	Subject                      *string           `json:"subject,omitempty"`
+	TitleTranslate               *string           `json:"title_translate,omitempty"`
+	SubjectTranslate             *string           `json:"subject_translate,omitempty"`
+	DocumentCode                 *string           `json:"document_code,omitempty"`
+	Description                  *string           `json:"description,omitempty"`
+	IssuingAuthority             *string           `json:"issuing_authority,omitempty"`
+	DocumentTemplateID           *string           `json:"document_template_id,omitempty"` // UUID
+	Priority                     int               `json:"priority"`
+	DocumentTemplateName         *string           `json:"document_template_name,omitempty"`
+	InputFileURLs                []string          `json:"input_file_urls"`
+	Snippet                      *string           `json:"snippet,omitempty"`
+	OriginalLangCode             string            `json:"original_lang_code"`
+	TranslateLangCode            string            `json:"translate_lang_code"`
+	Metadata                     *string           `json:"metadata,omitempty"`
+	EffectiveStartTime           *time.Time        `json:"effective_start_time,omitempty"`
+	EffectiveEndTime             *time.Time        `json:"effective_end_time,omitempty"`
+	Keywords                     []string          `json:"keywords,omitempty"`
+	TopicIDs                     []string          `json:"topic_ids,omitempty"`           // UUIDs
+	TopicRecommendIDs            []string          `json:"topic_recommend_ids,omitempty"` // UUIDs
+	Signer                       *string           `json:"signer,omitempty"`
+	IsDetectFace                 bool              `json:"is_detect_face"`
+	CanFindDocumentByImage       bool              `json:"can_find_document_by_image"`
+	UploadConfigID               *string           `json:"upload_config_id,omitempty"` // UUID
+	Publisher                    *string           `json:"publisher,omitempty"`
+	FileType                     FileTypes         `json:"file_type"`
+	Status                       DocumentStatus    `json:"status"`
+	OcrProcessStatus             ProcessStatuses   `json:"ocr_process_status"`
+	FaceDetectProcessStatus      ProcessStatuses   `json:"face_detect_process_status"`
+	ExtractPureInfoProcessStatus ProcessStatuses   `json:"extract_pure_info_process_status"`
+	ExtractContentProcessStatus  ProcessStatuses   `json:"extract_content_process_status"`
+	LegalDocumentProcessStatus   ProcessStatuses   `json:"legal_document_process_status"`
+	ApproveStatus                ApproveStatus     `json:"approve_status"`
+	CreatorID                    string            `json:"creator_id"`
+	CreatorName                  *string           `json:"creator_name,omitempty"`
+	InsertedTime                 time.Time         `json:"inserted_time"`
+	IssuedTime                   *time.Time        `json:"issued_time,omitempty"`
+	ExtractionTypeKey            *string           `json:"extraction_type_key,omitempty"`
+	SummaryAll                   *string           `json:"summary_all,omitempty"`
+	Author                       *string           `json:"author,omitempty"`
+	Autograph                    *string           `json:"autograph,omitempty"`
+	ReliabilityLevel             *ReliabilityLevel `json:"reliability_level,omitempty"`
+	PhysicalState                *PhysicalState    `json:"physical_state,omitempty"`
+	Classification               *Classification   `json:"classification,omitempty"`
+	ColorType                    *ColorType        `json:"color_type,omitempty"`
+	HasAttachment                *HasAttachment    `json:"has_attachment,omitempty"`
+	FontID                       *string           `json:"font_id,omitempty"` // UUID
+	FontCode                     *string           `json:"font_code,omitempty"`
+	ResumeID                     *string           `json:"resume_id,omitempty"` // UUID
+	ResumeCode                   *string           `json:"resume_code,omitempty"`
+	DocumentTypeCodes            []string          `json:"document_type_codes,omitempty"`
+	Privacy                      Privacy           `json:"privacy"`
+	HasBackup                    bool              `json:"has_backup"`
+	BackupStatus                 BackupStatus      `json:"backup_status"`
+	Genre                        *DocumentGenre    `json:"genre,omitempty"`
+	Form                         *DocumentForm     `json:"form,omitempty"`
+	Note                         *string           `json:"note,omitempty"`
+	InputSourceType              *string           `json:"input_source_type,omitempty"`
+	IntegrationID                *string           `json:"integration_id,omitempty"`
+}
+
+type DocumentConfig struct {
+	Name         string    `json:"name"`
+	Key          string    `json:"key"`
+	DataType     string    `json:"data_type"`
+	Regex        string    `json:"regex"`
+	BBox         []float32 `json:"bbox"`
+	IsRequired   bool      `json:"is_required"`
+	StartContent string    `json:"start_content"`
+	EndContent   string    `json:"end_content"`
 }
 
 // Enums
 type FileTypes int
 
 const (
-// Define your values here based on the original C# enum.
+	FileTypeImage FileTypes = 1
+	FileTypeVideo FileTypes = 2
+	FileTypePdf   FileTypes = 3
+	FileTypeDoc   FileTypes = 4
 )
 
 type DocumentStatus int
 
 const (
-	NotStart DocumentStatus = iota
+	DocStatusNotStart DocumentStatus = 1
+	DocStatusPending  DocumentStatus = 2
+	DocStatusDone     DocumentStatus = 3
+	DocStatusFail     DocumentStatus = 4
+
 	// Add more statuses as needed
 )
 
 type ProcessStatuses int
 
 const (
-	Pending ProcessStatuses = iota
-	// Add more statuses as needed
+	Error      ProcessStatuses = -1
+	Pending    ProcessStatuses = 0
+	Processing ProcessStatuses = 1
+	Done       ProcessStatuses = 2
 )
 
 type ApproveStatus int
 
 const (
-	Draft ApproveStatus = iota
-	// Add more statuses as needed
+	ApproveStatusDraft ApproveStatus = iota
+	ApproveStatusPending
+	ApproveStatusApproved
+	ApproveStatusRejected
 )
-
-// Additional types
-type DocumentTemplateDetail struct {
-	// Define fields here
-}
-
-type KeywordTypes struct {
-	ListNamePerson    []string `json:"list_name_person"`
-	ListOrganizations []string `json:"list_organizations"`
-	ListLocation      []string `json:"list_location"`
-	ListJobPosition   []string `json:"list_job_position"`
-}
-
-type TagDto struct {
-	// Define fields here
-}
-
-type ExtractContentDto struct {
-	// Define fields here
-}
-
-type DocumentFaceDto struct {
-	// Define fields here
-}
-
-type DocumentDetailDto struct {
-	// Define fields here
-}
-
-type DocumentTemplateDto struct {
-	// Define fields here
-}
-
-type UploadConfigDto struct {
-	// Define fields here
-}
-
-type TopicDto struct {
-	// Define fields here
-}
-
-type RecommendedDocumentTopicDto struct {
-	// Define fields here
-}
-
-type EntityActivityDto struct {
-	// Define fields here
-}
-
-type DocumentTopicDto struct {
-	// Define fields here
-}
-
-type TopicTrainingDocumentPrototypeDto struct {
-	// Define fields here
-}
-
-type DocumentTypeDto struct {
-	// Define fields here
-}
-
-type DocumentDocumentTypeDto struct {
-	// Define fields here
-}
-
-type ResumeDto struct {
-	// Define fields here
-}
-
-type DocumentTagDto struct {
-	// Define fields here
-}
-
-type DocumentViewLogDto struct {
-	// Define fields here
-}
 
 type ReliabilityLevel int
 

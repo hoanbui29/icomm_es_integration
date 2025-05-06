@@ -6,6 +6,7 @@ type ES_Document struct {
 	FondCodePartyCode string      `json:"fondCode_partyCode"`
 	ID                string      `json:"id"`
 	Metadata          ES_Metadata `json:"metadata"`
+	Type              string      `json:"type"`
 }
 
 type ES_Metadata struct {
