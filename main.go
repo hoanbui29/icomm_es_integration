@@ -28,7 +28,7 @@ func main() {
 		panic("Error loading .env file")
 	}
 
-	file, err := os.Open("data.txt")
+	file, err := os.Open(os.Getenv("FILE_PATH"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,7 +61,6 @@ func main() {
 func processData(db *sql.DB, esClient *elasticsearch.TypedClient, mqChan *amqp091.Channel, data *models.ES_Document) {
 	doc, isExisted := saveDoc(db, esClient, data)
 	if isExisted {
-		log.Printf("Document with ID %s already exists in the database", data.ID)
 		return
 	}
 
