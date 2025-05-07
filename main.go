@@ -65,7 +65,7 @@ func processData(db *sql.DB, esClient *elasticsearch.TypedClient, mqChan *amqp09
 		return
 	}
 
-	var detailContent []models.DetailContent
+	var detailContent []models.DetailContent = []models.DetailContent{}
 
 	var content = parseContent(data.Content)
 
@@ -229,7 +229,7 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 		true,
 		1,
 		pq.Array([]string{}),
-		[]byte(`{}`),
+		[]byte(`[]`),
 		false,
 		1,
 		0,
@@ -297,15 +297,6 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 	}
 
 	return &document, false
-}
-
-func checkExists(db *sql.DB, id string) bool {
-	var exists bool
-	err := db.QueryRow("SELECT EXISTS(SELECT 1 FROM documents WHERE integration_id=$1)", id).Scan(&exists)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return exists
 }
 
 func initDb() *sql.DB {
