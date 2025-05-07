@@ -140,7 +140,13 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 		fileType = models.FileTypeDoc
 	}
 
-	issuedTime := time.UnixMilli(data.Metadata.IssuedDate)
+	issuedDate := time.UnixMilli(data.Metadata.IssuedDate)
+	var issuedTime *time.Time
+	if !isValidTime(&issuedDate) {
+		issuedTime = nil
+	} else {
+		issuedTime = &issuedDate
+	}
 	inputSourceType := "tich_hop_es"
 	language := ParseLangCode(data.Metadata.Language)
 	privacy := ParsePrivacy(data.Metadata.Mode)
@@ -275,7 +281,7 @@ func saveDoc(db *sql.DB, esClient *elasticsearch.TypedClient, data *models.ES_Do
 		FileType:                     fileType,
 		CreatedTime:                  createdTime,
 		InsertedTime:                 createdTime,
-		IssuedTime:                   &issuedTime,
+		IssuedTime:                   issuedTime,
 		DocumentCode:                 &data.Metadata.ArcDocCode,
 		CreatorID:                    systemKeyId,
 		CreatorName:                  &creatorName,
@@ -446,4 +452,12 @@ func parseContent(unknownTypeContent any) string {
 	default:
 		return ""
 	}
+}
+
+func isValidTime(t *time.Time) bool {
+	if t == nil {
+		return false
+	}
+	year := t.Year()
+	return year >= 0 && year <= 9999
 }
