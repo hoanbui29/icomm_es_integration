@@ -22,17 +22,14 @@ type esData struct {
 }
 
 func main() {
-	err := godotenv.Load()
-
-	if err != nil {
-		panic("Error loading .env file")
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
 	}
 
 	file, err := os.Open(os.Getenv("FILE_PATH"))
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
@@ -46,8 +43,7 @@ func main() {
 	for scanner.Scan() {
 		line := scanner.Text()
 		var item models.ES_RawData
-		err := json.Unmarshal([]byte(line), &item)
-		if err != nil {
+		if err := json.Unmarshal([]byte(line), &item); err != nil {
 			log.Fatal(err)
 		}
 		processData(db, esClient, mqChan, &item.Source)
@@ -55,6 +51,10 @@ func main() {
 		if count%100 == 0 {
 			log.Printf("Processed %d documents", count)
 		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
 	}
 }
 
