@@ -11,6 +11,7 @@ import (
 	pq "github.com/lib/pq"
 	"github.com/rabbitmq/amqp091-go"
 	"icomm/esintegration/models"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -32,7 +33,7 @@ func main() {
 	}
 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
+	reader := bufio.NewReader(file)
 
 	db := initDb()
 	esClient := initESClient()
@@ -40,21 +41,25 @@ func main() {
 
 	count := 0
 
-	for scanner.Scan() {
-		line := scanner.Text()
-		var item models.ES_RawData
-		if err := json.Unmarshal([]byte(line), &item); err != nil {
-			log.Fatal(err)
+	for {
+		line, err := reader.ReadString('\n')
+		if err != nil && err != io.EOF {
+			log.Fatalf("Error reading file: %v", err)
 		}
-		processData(db, esClient, mqChan, &item.Source)
-		count++
-		if count%100 == 0 {
-			log.Printf("Processed %d documents", count)
+		if len(line) > 0 {
+			var item models.ES_RawData
+			if err := json.Unmarshal([]byte(line), &item); err != nil {
+				log.Fatalf("Error unmarshaling JSON: %v", err)
+			}
+			processData(db, esClient, mqChan, &item.Source)
+			count++
+			if count%100 == 0 {
+				log.Printf("Processed %d documents", count)
+			}
 		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		if err == io.EOF {
+			break
+		}
 	}
 }
 
